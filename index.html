@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Automatic HTML5 Video Playlist player with wall - egor@akulovs.com </title>
+    <!-- <link href="all.css" rel="stylesheet" type="text/css"> -->
+    <style>
+    body {
+        position: fixed;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #000000;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- <video id="vid1" style="position: fixed; width: 1280px; height: 720px; top: 0px; left:0px;">
+    <source src="" type="video/mp4">
+</video> -->
+    <script src='js/jquery.js'></script>
+    <script src="js/stats.js"></script>
+    <script src="js/pixi.js"></script>
+    <script src="js/peer.js"></script>
+    <script src="js/lockr.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/raVideoWall.js"></script>
+    <script src='js/raUnifiPlayer.js'></script>
+    <script src="js/webRTCSlave.js"></script>
+    <script src="js/webRTCCommandProcessor.js"></script>
+    <script>
+    webRTCSlave(runLoop);
+
+    function runLoop(data, conn) {
+        webRTCCommandProcessor(data, conn);     
+    }
+    
+    var config = {}
+
+    if (Lockr.get('config')){
+        config = Lockr.get('config')
+    }
+    else {
+        config = getConfig('config.json')
+    }
+     
+    if (config.mode.mediaType === 'video') {
+        /* 
+         * Initialize video element 
+         */
+        var videos = getConfig(config.mediaAssets);
+        var vid = document.createElement('video');
+        vid.id = 'video1';
+        vid.removeAttribute("controls");
+        vid.removeAttribute("poster");
+        vid.muted = true;
+        /* important, if you load video from cross-origin location!!!
+         * see: https://code.google.com/p/chromium/issues/detail?id=422338
+         */
+        vid.crossOrigin = "anonymous";
+
+        var pl1 = new raUnifiPlayer(vid, videos);
+        if (config.mode.effect === 'wall') { // Starts video wall player
+            raVideoWall(vid, config);
+        }
+        if (config.mode.effect === 'single') { // Starts Single player
+            vid.width = config.width;
+            vid.height = config.height;
+            var body = document.querySelector('body');
+            body.appendChild(this.vid);
+        }
+        pl1.select(0);
+    }
+    if (config.mode.mediaType === 'slides') {
+
+    }
+    </script>
+</body>
+
+</html>

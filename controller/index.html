@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Automatic HTML5 Video Playlist player with wall - egor@akulovs.com </title>
+</head>
+
+<body>
+    <script src="../js/peer.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/webRTCInitiator.js"></script>
+    <script src="../js/webRTCCommandProcessor.js"></script>
+    <script type="text/javascript">
+
+    var webRTCConn = webRTCInitiator(runLoop);
+
+    function runLoop(data, conn) {
+        if (data.error){
+            console.log("WEBRTC received error: ", data.error);
+        }
+        else if (data.config) {
+            console.log("WEBRTC received config: ", data.config);
+        }
+        else {
+            console.log("WEBRTC received some data: ", data);
+        }      
+        //conn.send("also!");
+    };
+    </script>
+</body>
+
+</html>

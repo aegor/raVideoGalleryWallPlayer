@@ -1,0 +1,13 @@
+{
+    "mediaAssets": "assets",
+    "width": "1280",
+    "height": "720",
+    "mode": {
+        "mediaType": "video",
+        "effect": "single"
+    }, 
+    "isWall": "false",
+    "wallNumOfPlayers": "4",
+    "wallStats": "true",
+    "wallSplitBy": "2"
+}

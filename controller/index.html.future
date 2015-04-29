@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head lang="ru">
+    <script type="text/javascript" src="components/webcomponentsjs/webcomponents.js"></script>
+    <script type="text/javascript" src="components/js-data/dist/js-data.min.js"></script>
+    <script type="text/javascript" src="components/js-data-localstorage/dist/js-data-localstorage.min.js"></script>
+    <link rel="import" href="components/polymer/polymer.html">
+    <link rel="import" href="components/core-elements/core-elements.html">
+    <link rel="import" href="components/paper-elements/paper-elements.html">
+    <link rel="import" href="components/mark-down/mark-down.html">
+    <meta charset="UTF-8">
+    <title>Hybinar transcoder by Igor Akulov</title>
+    <style>
+        body {
+            font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+            font-size: 14px;
+            margin: 0;
+            padding: 24px;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            -webkit-touch-callout: none;
+        }
+    </style>
+</head>
+<body>
+<polymer-element name="hy-transcoder" attributes="presetName video offset server stream presets">
+    <template>
+        <style>
+
+
+            :host video {
+                width: 100%;
+                height: auto;
+            }
+
+            :host paper-input-decorator {
+                padding: 0px;
+                width: 200px;
+                overflow: hidden;
+            }
+
+            :host paper-input {
+                padding: 0px;
+                width: 200px;
+                overflow: hidden;
+            }
+
+            /* TODO Проверить, нафига? */
+            p {
+                margin: 0px;
+            }
+
+            /* Paper dropdowm menu stuff */
+            section {
+                padding: 20px 0;
+            }
+
+            section > div {
+                padding: 14px;
+                font-size: 16px;
+            }
+
+            :host paper-dropdown-menu {
+                box-sizing: border-box;
+                width: 180px;
+            }
+
+            :host core-menu {
+                box-sizing: border-box;
+                width: 200px;
+            }
+
+            :host paper-item {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            :host paper-button.colored {
+                color: #4285f4;
+            }
+
+            :host paper-button[raised].colored {
+                background: #4285f4;
+                color: #fff;
+            }
+
+            :host paper-button.custom > core-icon {
+                margin-right: 4px;
+            }
+
+            :host paper-button.hover:hover {
+                background: #eee;
+            }
+
+            :host paper-button.blue-ripple::shadow #ripple {
+                color: #4285f4;
+            }
+
+            :host .colored {
+                color: #0f9d58;
+            }
+
+            :host .dropdown.colored::shadow #ripple,
+            :host .dropdown.colored::shadow #background {
+                border: 1px solid #0f9d58;
+                background-color: #b7e1cd;
+            }
+        </style>
+        <core-scaffold>
+            <core-header-panel mode="seamed" navigation flex>
+                <core-toolbar style="background-color: #526E9C; color: #fff;">
+                </core-toolbar>
+                <core-menu selected="{{mainMenuSelected}}" selectedIndex="{{mainMenuSelectedIndex}}">
+                    <paper-input value="{{presetName}}" label="PRESET NAME" floatinglabel></paper-input>
+                    <paper-input value="{{video}}" label="VIDEO FILE" floatinglabel></paper-input>
+                    <paper-input value="{{offset}}" label="OFFSET [[HH:]MM:]SS[.XXX]" floatinglabel></paper-input>
+                    <paper-input value="{{server}}" label="SERVER" floatinglabel></paper-input>
+                    <paper-input value="{{stream}}" label="STREAM" floatinglabel></paper-input>
+                    <paper-button on-click="{{onDone}}">PLAY</paper-button>
+                    <paper-button on-click="{{onHelp}}">HELP</paper-button>
+                </core-menu>
+            </core-header-panel>
+            <div tool> <!-- EGOR: tool attribute = text on core toolbar -->
+                HYBINAR TRANSCODER BY IGOR AKULOV
+            </div>
+            <paper-dialog id="help" heading="HELP" opened="false">
+                <mark-down text="{{hybinarTranscoderHelp}}"></mark-down>
+            </paper-dialog>
+            <div id="pl"></div>
+        </core-scaffold>
+        <!--<core-localstorage name="model" value="{{model}}"></core-localstorage>-->
+    </template>
+    <script>
+        PolymerExpressions.prototype.debug = function (input, arg) {
+            var s = "color: blue; font-size: 12px;";
+            console.log("%cPOLYMER DEBUG FILTER. Input: " + input + " Argument: " + arg, s)
+            return input;
+        };
+        Polymer('hy-transcoder', {
+            presetName: 'default',
+            model: {},
+            modelAdapter: {},
+            player: {},
+            video: '01.mp4',
+            offset: '1:23',
+            server: 'hybinar.ru/live',
+            stream: 'egor',
+            hybinarTranscoderHelp: 'help',
+            config: {},
+            ready: function () {
+                this.modelAdapter = new DSLocalStorageAdapter();
+                this.model = new JSData.DS();
+                this.model.registerAdapter('localstorage', this.modelAdapter, { default: true });
+                this.config = require('../package.json');
+                this.hybinarTranscoderHelp = require('fs').readFileSync('./HELP.md', 'utf8');
+                debugger;
+            },
+            onHelp: function () {
+                var dialog = document.querySelector('body /deep/ #help');
+                dialog.open();
+            },
+            onDone: function () {
+                if (this.video.length === 0) {this.video = '01.mp4'}
+                if (this.offset.length === 0) {this.offset = '0'}
+                if (this.server.length === 0) {this.server = 'hybinar.ru/live'}
+                if (this.stream.length === 0) {this.stream = 'egor'}
+                var postUrl = 'http://localhost:5000/webm/'
+                        + encodeURIComponent(this.video) + '/'
+                        + '?offset=' + encodeURIComponent(this.offset)
+                        + '&server=' + encodeURIComponent(this.server)
+                        + '&stream=' + encodeURIComponent(this.stream);
+                console.log('PostURL:', postUrl);
+                if (this.player.pause) {this.stopPlayer()}
+                setTimeout(this.startPlayer(postUrl), 2000);
+            },
+            startPlayer: function (src) {
+                var player = document.querySelector('body /deep/ #pl');
+                this.player = document.createElement("video");
+                this.player.crossOrigin = "anonymous";
+                this.player.width = 1280;
+                this.player.height = 1024;
+                this.player.autoPlay = true;
+                this.player.loop = false;
+                this.player.muted = false;
+                this.player.src = src;
+                player.appendChild(this.player);
+                this.player.play();
+            },
+            stopPlayer: function () {
+                this.player.pause();
+                this.player.src = '';
+                this.player.parentNode.removeChild(this.player);
+                this.player = '';
+            }
+        });
+    </script>
+</polymer-element>
+<hy-transcoder></hy-transcoder>
+</body>
+</html>
