@@ -22,7 +22,7 @@ function webRTCInitiator(runLoop) {
 
     var webRTCConn = {};
 
-this.webRTCGetConnection = function(){
+this.GetConnection = function(){
     return webRTCConn
 }
 

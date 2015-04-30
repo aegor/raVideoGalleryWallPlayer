@@ -23,10 +23,10 @@ function webRTCCommandProcessor(message, conn) {
                 webRTCCommandError("selected index out of range", conn);
             }
             break;
-        case 'pause':
+        case '||':
             pl1.pause();
             break;
-        case 'play':
+        case '>':
             pl1.play();
             break;
         case 'loadConfig':
@@ -37,7 +37,7 @@ function webRTCCommandProcessor(message, conn) {
         case 'saveConfig':
             if (message.args.mediaAssets) {
                 Lockr.set('config', message.args);
-                config = message.args;
+                location.reload();
             } else {
                 webRTCCommandError("invalid config", conn);
             }

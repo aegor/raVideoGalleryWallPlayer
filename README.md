@@ -59,3 +59,31 @@ var message = {
     args: {}
 }
 ```
+Full list of available RPC commands:
+```
+    
+    Example commands:
+    
+    webRTCSendCommand('reboot', '', rtc.GetConnection())              // reboot player
+    
+    webRTCSendCommand('restart', '', rtc.GetConnection())             // restart 'rationale' service on player
+    
+    webRTCSendCommand('reload', '', rtc.GetConnection())              // reload page on player
+    
+    webRTCSendCommand('>>', '', rtc.GetConnection())                  // find forward in playlist
+    
+    webRTCSendCommand('<<', '', rtc.GetConnection())                  // find backward in playlist
+    
+    webRTCSendCommand('||', '', rtc.GetConnection())                  // pause
+    
+    webRTCSendCommand('>', '', rtc.GetConnection())                   // play
+    
+    webRTCSendCommand('select', 3, rtc.GetConnection())               // select item in playlist
+    
+    webRTCSendCommand('loadConfig', '', rtc.GetConnection())          // load config from player
+    
+    webRTCSendCommand('resetConfig', '', rtc.GetConnection())         // reset localstorage config on player and restart 
+    (player is configured from default local config.json file)
+    
+    webRTCSendCommand('saveConfig', localconfig, rtc.GetConnection()) // Save local preconfigured config data to player and restart
+```
