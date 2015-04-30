@@ -1,5 +1,6 @@
 var login = "";
 var password = "";
+
 function webRTCCommandProcessor(message, conn) {
     switch (message.command) {
         case 'reboot':
@@ -18,7 +19,9 @@ function webRTCCommandProcessor(message, conn) {
             pl1.backward();
             break;
         case 'select':
-            pl1.select(message.args);
+            if (pl1.select(message.args) !== 0){
+                webRTCCommandError("selected index out of range", conn);
+            }
             break;
         case 'pause':
             pl1.pause();
@@ -27,35 +30,40 @@ function webRTCCommandProcessor(message, conn) {
             pl1.play();
             break;
         case 'loadConfig':
-            conn.send({config: config});
+            conn.send({
+                config: config
+            });
             break;
         case 'saveConfig':
-            Lockr.set('config', message.args);
-            config = message.args;
+            if (message.args.mediaAssets) {
+                Lockr.set('config', message.args);
+                config = message.args;
+            } else {
+                webRTCCommandError("invalid config", conn);
+            }
             break;
         case 'resetConfig':
             Lockr.flush();
             location.reload();
+            break;
         default:
             webRTCCommandError("command not found", conn);
     }
 }
 
 function webRTCSendCommand(command, args, conn) {
-	var message = {};
-	message.credentials = {};
+    var message = {};
+    message.credentials = {};
     message.credentials.user = login;
-	message.credentials.password = password;
-	message.command = command;
-	message.args = args;
-	conn.send(message)
+    message.credentials.password = password;
+    message.command = command;
+    message.args = args;
+    conn.send(message)
 }
 
 function webRTCCommandError(err, conn) {
-	var message = {};
-	message.error = err;
-	console.log("WebRTC command error", err);
-	conn.send(mesage);
+    var message = {};
+    message.error = err;
+    console.log("WebRTC command error: ", err);
+    conn.send(message);
 }
-
-

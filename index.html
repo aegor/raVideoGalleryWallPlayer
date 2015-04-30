@@ -19,14 +19,12 @@
 </head>
 
 <body>
-    <!-- <video id="vid1" style="position: fixed; width: 1280px; height: 720px; top: 0px; left:0px;">
-    <source src="" type="video/mp4">
-</video> -->
-    <script src='js/jquery.js'></script>
-    <script src="js/stats.js"></script>
-    <script src="js/pixi.js"></script>
-    <script src="js/peer.js"></script>
-    <script src="js/lockr.js"></script>
+
+    <script src='js/vendor/jquery.js'></script>
+    <script src="js/vendor/stats.js"></script>
+    <script src="js/vendor/pixi.js"></script>
+    <script src="js/vendor/peer.js"></script>
+    <script src="js/vendor/lockr.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/raVideoWall.js"></script>
     <script src='js/raUnifiPlayer.js'></script>
@@ -38,16 +36,8 @@
     function runLoop(data, conn) {
         webRTCCommandProcessor(data, conn);     
     }
-    
-    var config = {}
-
-    if (Lockr.get('config')){
-        config = Lockr.get('config')
-    }
-    else {
-        config = getConfig('config.json')
-    }
-     
+       
+    initConfig();     
     if (config.mode.mediaType === 'video') {
         /* 
          * Initialize video element 
@@ -67,13 +57,16 @@
         if (config.mode.effect === 'wall') { // Starts video wall player
             raVideoWall(vid, config);
         }
-        if (config.mode.effect === 'single') { // Starts Single player
+        else if (config.mode.effect === 'single') { // Starts Single player
             vid.width = config.width;
             vid.height = config.height;
             var body = document.querySelector('body');
             body.appendChild(this.vid);
         }
-        pl1.select(0);
+        else{
+            //error
+        }
+        pl1.select(0); // TODO Вы уверены, что здесь?
     }
     if (config.mode.mediaType === 'slides') {
 

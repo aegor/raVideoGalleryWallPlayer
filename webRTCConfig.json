@@ -3,5 +3,6 @@
     "controllerId": "rationale-pl7-controller",
     "server": "localhost",
     "serverPort": "9000",
-    "serverPath": "/rationale"
+    "serverPath": "/rationale",
+    "debug": "0"
 }

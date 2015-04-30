@@ -7,13 +7,15 @@
 </head>
 
 <body>
-    <script src="../js/peer.js"></script>
+
+
+    <script src="../js/vendor/peer.js"></script>
     <script src="../js/utils.js"></script>
     <script src="../js/webRTCInitiator.js"></script>
     <script src="../js/webRTCCommandProcessor.js"></script>
     <script type="text/javascript">
 
-    var webRTCConn = webRTCInitiator(runLoop);
+    var rtc = new webRTCInitiator(runLoop);
 
     function runLoop(data, conn) {
         if (data.error){
@@ -21,12 +23,30 @@
         }
         else if (data.config) {
             console.log("WEBRTC received config: ", data.config);
+            localConfig = data.config;
         }
         else {
             console.log("WEBRTC received some data: ", data);
         }      
         //conn.send("also!");
     };
+
+    var localConfig = {};
+    /*
+    * Example commands:
+    * webRTCSendCommand('reboot', '', rtc.webRTCGetConnection())
+    * webRTCSendCommand('restart', '', rtc.webRTCGetConnection())
+    * webRTCSendCommand('reload', '', rtc.webRTCGetConnection())
+    * webRTCSendCommand('>>', '', rtc.webRTCGetConnection())
+    * webRTCSendCommand('<<', '', rtc.webRTCGetConnection())
+    * webRTCSendCommand('select', 3, rtc.webRTCGetConnection())
+    * webRTCSendCommand('pause', '', rtc.webRTCGetConnection())
+    * webRTCSendCommand('play', '', rtc.webRTCGetConnection())
+    * webRTCSendCommand('loadConfig', '', rtc.webRTCGetConnection())
+    * webRTCSendCommand('resetConfig', '', rtc.webRTCGetConnection())
+    * webRTCSendCommand('saveConfig', localconfig, rtc.webRTCGetConnection())
+    * 
+     */
     </script>
 </body>
 

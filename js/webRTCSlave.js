@@ -17,7 +17,7 @@ function webRTCSlave(runLoop) {
         host: webRTCConfig.server,
         port: webRTCConfig.serverPort,
         path: webRTCConfig.serverPath,
-        debug: 3
+        debug: webRTCConfig.debug
     });
     webRTCPeer.on('open', function(id) {
         console.log('My peer ID is: ' + id);
@@ -45,6 +45,9 @@ function webRTCSlave(runLoop) {
                 console.log('WEBRTC Connection error: ', err);
             });
             conn.on('disconnected', function() {
+                console.log('WEBRTC disconnected');
+            });
+            conn.on('close', function() {
                 console.log('WEBRTC disconnected');
             });
         });
