@@ -1,5 +1,5 @@
 {
-  "name": "corruption of name will result in loss of communication with player, so dynamically configured from webrtc config",
+  "name": "corruption of name will may result in loss of communication with player, so name must be dynamically configured from webrtc config",
   "resolutions": [{"width": "320", "height": "200"}, {"width": "640", "height": "480"}],
   "mediaType": [
     {"type": "video",

@@ -17,7 +17,7 @@ function webRTCInitiator(runLoop) {
 
 	webRTCPeer.on('error', function (err) {
 		console.log('WEBRTC Peer error: ', err);
-		location.reload();
+		//location.reload();
 	});
 
 	var webRTCConn = {};

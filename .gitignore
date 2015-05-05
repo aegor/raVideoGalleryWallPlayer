@@ -2,5 +2,6 @@ assets*
 photos*
 videos*
 .idea
+peeerjs-server/node_modules
 node_modules
 controller/components/**
