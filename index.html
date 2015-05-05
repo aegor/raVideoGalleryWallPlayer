@@ -4,45 +4,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Automatic HTML5 Video Playlist player with wall - egor@akulovs.com </title>
-    <!-- <link href="all.css" rel="stylesheet" type="text/css"> -->
     <style>
-    body {
-        position: fixed;
-        overflow-y: hidden;
-        overflow-x: hidden;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        background-color: #000000;
-    }
+        body {
+            position: fixed;
+            overflow-y: hidden;
+            overflow-x: hidden;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+        }
     </style>
 </head>
 
 <body>
 
-    <script src='js/vendor/jquery.js'></script>
-    <script src="js/vendor/stats.js"></script>
-    <script src="js/vendor/pixi.js"></script>
-    <script src="js/vendor/peer.js"></script>
-    <script src="js/vendor/lockr.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/raVideoWall.js"></script>
-    <script src='js/raUnifiPlayer.js'></script>
-    <script src="js/webRTCSlave.js"></script>
-    <script src="js/webRTCCommandProcessor.js"></script>
-    <script>
+<script src='js/vendor/jquery.js'></script>
+<script src="js/vendor/stats.js"></script>
+<script src="js/vendor/pixi.js"></script>
+<script src="js/vendor/peer.js"></script>
+<script src="js/vendor/lockr.js"></script>
+<script src="js/vendor/diaporama.bundle.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/raVideoWall.js"></script>
+<script src='js/raUnifiPlayer.js'></script>
+<script src="js/webRTCSlave.js"></script>
+<script src="js/webRTCCommandProcessor.js"></script>
+
+<script>
+
     webRTCSlave(runLoop);
 
     function runLoop(data, conn) {
-        webRTCCommandProcessor(data, conn);     
+        webRTCCommandProcessor(data, conn);
     }
-       
-    initConfig();     
-    if (config.mode.mediaType === 'video') {
+
+    initConfig();
+    config.name = webRTCConfig.name; // TODO - name is always configure from webRTCConfig
+
+    var mt = config.mediaType[config.mediaTypeSelected];
+    var effect = mt.effect[mt.effectSelected];
+    var assets = mt.assets;
+    var assetURLS = getConfig(assets);
+    var resolution = config.resolutions[config.resolutionSelected];
+
+    if (mt.type === 'video') {
         /* 
          * Initialize video element 
          */
-        var videos = getConfig(config.mediaAssets);
         var vid = document.createElement('video');
         vid.id = 'video1';
         vid.removeAttribute("controls");
@@ -53,25 +62,50 @@
          */
         vid.crossOrigin = "anonymous";
 
-        var pl1 = new raUnifiPlayer(vid, videos);
-        if (config.mode.effect === 'wall') { // Starts video wall player
+        var pl1 = new RaUnifiPlayer(vid, assetURLS);
+        pl1.select(0); // TODO Вы уверены, что здесь?
+
+        if (effect.indexOf("wall") === 0) { // Starts video wall player
             raVideoWall(vid, config);
         }
-        else if (config.mode.effect === 'single') { // Starts Single player
-            vid.width = config.width;
-            vid.height = config.height;
+        else if (effect.indexOf('single') === 0) { // Starts Single player
+            vid.width = resolution.width;
+            vid.height = resolution.height;
             var body = document.querySelector('body');
             body.appendChild(this.vid);
         }
-        else{
-            //error
+        else {
+            console.log("ra-unifi-player: unsupported configuration");
         }
-        pl1.select(0); // TODO Вы уверены, что здесь?
-    }
-    if (config.mode.mediaType === 'slides') {
 
     }
-    </script>
+    if (mt.type === 'slides') {
+        var json = getConfig(assets + "/diaporama.json");
+        for (i in json.timeline) {
+            json.timeline[i].image = assets + "/" + json.timeline[i].image;
+        }
+        ;
+        var dia = document.createElement('div');
+        var diaporama = Diaporama(dia, {
+            width: resolution.width,
+            height: resolution.height,
+            data: json,
+            autoplay: true,
+            loop: true
+        });
+        if (effect.indexOf("wall") === 0) {
+            setTimeout(function () {
+                        raVideoWall(dia.getElementsByTagName('canvas')[0], config);
+                    },
+                    1000
+            );
+        }
+        else if (effect.indexOf('single') === 0) {
+            var body = document.querySelector('body');
+            body.appendChild(dia);
+        }
+    }
+</script>
 </body>
 
 </html>

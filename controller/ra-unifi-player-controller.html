@@ -1,0 +1,120 @@
+<script type="text/javascript" src="components/webcomponentsjs/webcomponents.js"></script>
+<script type="text/javascript" src="components/lodash/lodash.js"></script>
+<script src="../js/vendor/peer.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/webRTCInitiator.js"></script>
+<script src="../js/webRTCCommandProcessor.js"></script>
+
+<link rel="import" href="components/polymer/polymer.html">
+<link rel="import" href="components/core-elements/core-elements.html">
+<link rel="import" href="components/paper-elements/paper-elements.html">
+<link rel="import" href="components/mark-down/mark-down.html">
+<link rel="import" href="components/font-awesome-polymer-icons/fa-icons.html">
+<link rel="import" href="components/paper-dropdown-menu-ex/paper-dropdown-menu-ex.html">
+
+<polymer-element name="ra-unifi-player-controller"
+                 attributes="config assets playlistSelected">
+    <template>
+        <link rel="stylesheet" href="ra-unifi-player-controller.css">
+        <core-scaffold>
+            <core-header-panel mode="seamed" navigation flex>
+                <core-toolbar style="background-color: #526E9C; color: #fff;">
+                </core-toolbar>
+                <core-menu selected="{{mainMenuSelected}}" selectedIndex="{{mainMenuSelectedIndex}}">
+                    <div horizontal layout>
+                        <paper-icon-button icon="fa:backward" title="backward"
+                                           on-click="{{onBackward}}"></paper-icon-button>
+                        <paper-icon-button icon="fa:pause" title="pause" on-click="{{onPause}}"></paper-icon-button>
+                        <paper-icon-button icon="fa:play" title="play" on-click="{{onPlay}}"></paper-icon-button>
+                        <paper-icon-button icon="fa:forward" title="forward"
+                                           on-click="{{onForward}}"></paper-icon-button>
+                    </div>
+                    <paper-dropdown-menu-ex on-core-select={{onPlaylistSelected}} label="ПЛЭЙЛИСТ">
+                        <paper-dropdown class="dropdown">
+                            <core-menu class="menu" selected={{playlistSelected}}>
+                                <template repeat="{{assets}}">
+                                    <paper-item>{{}}</paper-item>
+                                </template>
+                            </core-menu>
+                        </paper-dropdown>
+                    </paper-dropdown-menu-ex>
+                    <div vertical layout>
+                        <div horizontal start-justified layout>
+                            <paper-button on-click="{{onHelp}}">ПОМОЩЬ</paper-button>
+                        </div>
+                        <div horizontal start-justified layout>
+                            <paper-button on-click="{{onReboot}}">ПЕРЕЗАГРУЗКА</paper-button>
+                        </div>
+                        <div horizontal start-justified layout>
+                            <paper-button on-click="{{onRestart}}">РЕСТАРТ СЕРВИСА</paper-button>
+                        </div>
+                        <div horizontal start-justified layout>
+                            <paper-button on-click="{{onReload}}">ОБНОВИТЬ ДИЗАЙН</paper-button>
+                        </div>
+                    </div>
+                </core-menu>
+            </core-header-panel>
+            <div tool>
+                <!-- EGOR: tool attribute = text on core toolbar -->
+                RATIONALE Player&nbsp{{config.name}}
+            </div>
+            <paper-dialog id="help" heading="HELP" opened="false">
+                <mark-down text="{{hybinarTranscoderHelp}}"></mark-down>
+            </paper-dialog>
+            <div horizontal layout>
+                <paper-input value="{{config.name}}" label="ИМЯ ПЛЕЕРА" floatinglabel disabled></paper-input>
+                <template bind="{{config.mediaType[config.mediaTypeSelected]}}">
+                    <paper-input value="{{assets}}" label="ПУТЬ К МЕДИА" floatinglabel></paper-input>
+                </template>
+            </div>
+            <div horizontal layout>
+                <paper-dropdown-menu-ex label="ШИРИНА">
+                    <paper-dropdown class="dropdown">
+                        <core-menu class="menu" selected="{{config.resolutionSelected}}">
+                            <template repeat="{{config.resolutions}}">
+                                <paper-item>{{width}}</paper-item>
+                            </template>
+                        </core-menu>
+                    </paper-dropdown>
+                </paper-dropdown-menu-ex>
+                <paper-dropdown-menu-ex label="ВЫСОТА">
+                    <paper-dropdown class="dropdown">
+                        <core-menu class="menu" selected="{{config.resolutionSelected}}">
+                            <template repeat="{{config.resolutions}}">
+                                <paper-item>{{height}}</paper-item>
+                            </template>
+                        </core-menu>
+                    </paper-dropdown>
+                </paper-dropdown-menu-ex>
+            </div>
+            <div horizontal layout>
+                <paper-dropdown-menu-ex label="ТИП МЕДИА">
+                    <paper-dropdown class="dropdown">
+                        <core-menu class="menu" selected="{{config.mediaTypeSelected}}">
+                            <template repeat="{{config.mediaType}}">
+                                <paper-item>{{type}}</paper-item>
+                            </template>
+                        </core-menu>
+                    </paper-dropdown>
+                </paper-dropdown-menu-ex>
+                <paper-dropdown-menu-ex label="ЭФФЕКТ МЕДИА">
+                    <paper-dropdown class="dropdown">
+                        <template bind="{{config.mediaType[config.mediaTypeSelected]}}">
+                            <core-menu class="menu" selected="{{effectSelected}}">
+                                <template repeat="{{effect}}">
+                                    <paper-item>{{}}</paper-item>
+                                </template>
+                            </core-menu>
+                        </template>
+                    </paper-dropdown>
+                </paper-dropdown-menu-ex>
+                </paper-input>
+            </div>
+            <div horizontal layout>
+                <paper-button raised on-click="{{onConfigSave}}">ЗАПИСАТЬ В ПЛЕЕР</paper-button>
+                <paper-button raised on-click="{{onConfigReset}}">СТЕРЕТЬ КОНФИГ</paper-button>
+            </div>
+        </core-scaffold>
+    </template>
+    <script type="text/javascript" src="ra-unifi-player-controller.js"></script>
+</polymer-element>

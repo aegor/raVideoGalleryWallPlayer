@@ -1,13 +1,27 @@
 {
-    "mediaAssets": "assets",
-    "width": "1280",
-    "height": "720",
-    "mode": {
-        "mediaType": "video",
-        "effect": "single"
-    }, 
-    "isWall": "false",
-    "wallNumOfPlayers": "4",
-    "wallStats": "true",
-    "wallSplitBy": "2"
+  "name": "corruption of name will result in loss of communication with player, so dynamically configured from webrtc config",
+  "resolutions": [{"width": "320", "height": "200"}, {"width": "640", "height": "480"}],
+  "mediaType": [
+    {"type": "video",
+      "effect": [
+        "single",
+        "wall-2-2",
+        "wall-3-2"
+      ],
+      "effectSelected": "0",
+      "assets": "videos"
+    },
+    {"type": "slides",
+      "effect": [
+        "single-kenburn",
+        "single-linear",
+        "wall-2-2"
+      ],
+      "effectSelected": "2",
+      "assets": "photos"
+    }
+  ],
+  "mediaTypeSelected": "0",
+  "resolutionSelected": "0",
+  "wallStats": "true"
 }

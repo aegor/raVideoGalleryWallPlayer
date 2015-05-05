@@ -16,7 +16,6 @@
         mode: {mediaType: 'video', effect: 'wall'}, 
         //mode: {mediaType: 'video', effect: 'single'},
         //mode: {mediaType: 'slides', effect: 'kenburn'}, 
-        isWall: false,
         wallNumOfPlayers: 4,
         wallStats: true,
         wallSplitBy: 2

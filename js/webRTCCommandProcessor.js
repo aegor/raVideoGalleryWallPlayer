@@ -35,7 +35,7 @@ function webRTCCommandProcessor(message, conn) {
             });
             break;
         case 'saveConfig':
-            if (message.args.mediaAssets) {
+            if (message.args.mediaType) {
                 Lockr.set('config', message.args);
                 location.reload();
             } else {

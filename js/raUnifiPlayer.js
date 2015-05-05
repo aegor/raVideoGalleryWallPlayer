@@ -1,4 +1,4 @@
-function raUnifiPlayer(vid, videos) {
+function RaUnifiPlayer(vid, videos) {
     this.video = vid;
     this.currentVid = 0;
     this.nextVid = 0;

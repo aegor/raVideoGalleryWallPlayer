@@ -1,3 +1,6 @@
 assets*
+photos*
+videos*
+.idea
 node_modules
 controller/components/**

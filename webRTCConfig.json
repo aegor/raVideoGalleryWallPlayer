@@ -1,6 +1,5 @@
 {
-    "id": "rationale-pl7",
-    "controllerId": "rationale-pl7-controller",
+    "name": "pl8",
     "server": "localhost",
     "serverPort": "9000",
     "serverPath": "/rationale",

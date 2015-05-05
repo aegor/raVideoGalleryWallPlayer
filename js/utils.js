@@ -33,7 +33,7 @@ function getConfig(config) {
 };
 
 function reboot() {
-    console.log('reboot coomand received');
+    console.log('reboot command received');
 }
 
 function restart() {

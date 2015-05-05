@@ -1,0 +1,89 @@
+:host video {
+    width: 100%;
+    height: auto;
+}
+
+:host paper-input-decorator {
+    padding: 0px;
+    width: 200px;
+    overflow: hidden;
+}
+
+:host paper-input {
+    padding: 20px;
+    width: 200px;
+    overflow: hidden;
+}
+/* TODO Проверить, нафига? */
+
+p {
+    margin: 0px;
+}
+/* Paper dropdowm menu stuff */
+
+section {
+    padding: 20px 0;
+}
+
+section > div {
+    padding: 14px;
+    font-size: 16px;
+}
+
+:host paper-dropdown-menu {
+    box-sizing: border-box;
+    width: 200px;
+    padding: 0px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+:host paper-dropdown-menu-ex {
+    box-sizing: border-box;
+    width: 200px;
+    padding: 0px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+:host core-menu {
+    box-sizing: border-box;
+    width: 200px;
+}
+
+:host paper-item {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+:host paper-button.colored {
+    color: #4285f4;
+}
+
+:host paper-button[raised].colored {
+    background: #4285f4;
+    color: #fff;
+}
+
+:host paper-button.custom > core-icon {
+    margin-right: 4px;
+}
+
+:host paper-button.hover:hover {
+    background: #eee;
+}
+
+:host paper-button.blue-ripple::shadow #ripple {
+    color: #4285f4;
+}
+
+:host .colored {
+    color: #0f9d58;
+}
+
+:host .dropdown.colored::shadow #ripple,
+:host .dropdown.colored::shadow #background {
+    border: 1px solid #0f9d58;
+    background-color: #b7e1cd;
+}
